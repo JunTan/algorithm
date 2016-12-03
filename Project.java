@@ -3,25 +3,29 @@ import java.util.*;
 public class Project {
 	private LinkedList<Integer> graph[];
 	Project(int[][] adj) {
-		LinkedList<Integer> graph[] = initializegraph(adj);
+		graph = initializegraph(adj);
 	}
 	public static void main(String args[]) {
-		BufferedReader r = new BufferedReader(new FileReader(args[0]));
-        String s = r.readLine();
-        int V = Integer.parseInt(s);
-        int adj[][] = new int[V][V];
-        for(int j = 0; j < V; j++) {
-            s = r.readLine();
-            String[] s2 = s.split(" ");
-            for(int k = 0; k < V; k++){
-                adj[j][k] = Integer.parseInt(s2[k]);
+        try {
+    		BufferedReader r = new BufferedReader(new FileReader(args[0]));
+            String s = r.readLine();
+            int V = Integer.parseInt(s);
+            int adj[][] = new int[V][V];
+            for(int j = 0; j < V; j++) {
+                s = r.readLine();
+                String[] s2 = s.split(" ");
+                for(int k = 0; k < V; k++){
+                    adj[j][k] = Integer.parseInt(s2[k]);
+                }
             }
+            Project p = new Project(adj);
         }
-        Project p = new Project(adj);
-        HashMap<Integer, Integer> weight = initializeweight(adj);
+        catch (IOException e) {
+            return;
+        }
 	}
 
-	private static LinkedList<Integer>[] initializegraph(int[][] input) {
+	private LinkedList<Integer>[] initializegraph(int[][] input) {
 		LinkedList<Integer> graph[] = new LinkedList[input.length];
 		for (int i = 0; i < input.length; i++)
 			graph[i] = new LinkedList();
@@ -32,15 +36,17 @@ public class Project {
 				}
 			}
 		}
+        return graph;
 	}
-	private static HashMap<Integer, Integer> initializeweight(int[][] input) {
+	private HashMap<Integer, Integer> initializeweight(int[][] input) {
 		HashMap<Integer, Integer> weight = new HashMap<>();
 		for (int i = 0; i < input.length; i++) {
 			weight.put(i, input[i][i]);
 		}
+        return weight;
 	}
 
-	private static void SCC(int length) {
+	private void SCC(int length) {
 		Stack stack = new Stack();
 		boolean visited[] = new boolean[length];
 		for (int i = 0; i < length; i++) {
@@ -70,10 +76,10 @@ public class Project {
 
 	}
 
-	private static void fillOrder(int v, boolean visited[], Stack stack)
+	private void fillOrder(int v, boolean visited[], Stack stack)
     {
         visited[v] = true;
-        Iterator<Integer> i = this.graph[v].iterator();
+        Iterator<Integer> i = graph[v].iterator();
         while (i.hasNext())
         {
             int n = i.next();
@@ -84,7 +90,7 @@ public class Project {
         stack.push(new Integer(v));
     }
 
-    private static LinkedList<Integer>[] getTranspose(int length)
+    private LinkedList<Integer>[] getTranspose(int length)
     {
         LinkedList<Integer> g[] = new LinkedList[length];
 		for (int i = 0; i < length; i++)
@@ -92,14 +98,14 @@ public class Project {
         for (int v = 0; v < length; v++)
         {
 
-            Iterator<Integer> i = this.graph[v].listIterator();
+            Iterator<Integer> i = graph[v].listIterator();
             while(i.hasNext())
                 g[i.next()].add(v);
         }
         return g;
     }
 
-    private static void DFSUtil(int v, boolean visited[], LinkedList<Integer>[] gr)
+    private void DFSUtil(int v, boolean visited[], LinkedList<Integer>[] gr)
     {
         visited[v] = true;
         System.out.print(v + " ");
