@@ -72,7 +72,7 @@ public class Project {
             if (visited[v] == false)
             {
                 DFSUtil(v, visited, gr);
-                System.out.println();
+                System.out.println("hiiiiiiiiiiiiiiiiii");
             }
         }
 
@@ -82,7 +82,7 @@ public class Project {
 	private void fillOrder(int v, boolean visited[], Stack stack)
     {
         visited[v] = true;
-        Iterator<Integer> i = graph[v].iterator();
+        Iterator<Integer> i = this.graph[v].iterator();
         while (i.hasNext())
         {
             int n = i.next();
