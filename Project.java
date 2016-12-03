@@ -19,6 +19,7 @@ public class Project {
                 }
             }
             Project p = new Project(adj);
+            p.SCC(V);
         }
         catch (IOException e) {
             return;
@@ -31,9 +32,11 @@ public class Project {
 			graph[i] = new LinkedList();
 		for (int i = 0; i < input.length; i++) {
 			for (int j = 0; j < input[0].length; j++) {
-				if (input[i][j] == 1) {
-					graph[i].add(j);
-				}
+                if (i != j) {
+				    if (input[i][j] == 1) {
+					   graph[i].add(j);
+				    }
+                }
 			}
 		}
         return graph;
