@@ -3,9 +3,11 @@ import java.util.*;
 public class Horse {
 	private LinkedList<Integer> graph[];
     private int weight[];
+    private HashSet<Integer> team;
 	Horse(int[][] adj) {
 		this.graph = initializegraph(adj);
         weight = initializeweight(adj);
+        team = new HashSet<Integer>();
 	}
 	public static void main(String args[]) {
         try {
@@ -25,12 +27,37 @@ public class Horse {
             for (int i = 0; i < V; i++) {
                 visited[i] = false;
             }
-
-            Iterator<Integer> i = p.extractlongestpath(visited).iterator();
-            while (i.hasNext()) {
-                int n = i.next();
-                System.out.print(n);
+            ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+            ArrayList<Integer> curlongest = p.extractlongestpath(visited);
+            p.team.addAll(curlongest);
+            result.add(curlongest);
+            while (curlongest.size() > 1) {
+                for (int i = 0; i < V; i++) {
+                    visited[i] = false;
+                }
+                curlongest = p.extractlongestpath(visited);
+                p.team.addAll(curlongest);
+                result.add(curlongest);
             }
+            for (int i = 0; i < V; i++) {
+                if (!p.team.contains(i)) {
+                    ArrayList<Integer> temp = new ArrayList<Integer>();
+                    temp.add(i);
+                    result.add(temp);
+                }
+            }
+
+            String str = ""
+
+            for (ArrayList<Integer> l : result) {
+                for (int i : l) {
+                    str = str + i + " ";
+                }
+                str = str.trim() + ";"
+            }
+            str = str.substring(0, str.length()-1) + "\n";
+
+
 
         }
         catch (IOException e) {
@@ -64,7 +91,7 @@ public class Horse {
         int maxweight = 0;
         ArrayList<Integer> longestpath = new ArrayList<Integer>();
         for (int i = 0; i < graph.length; i++) {
-            if (visited[i] == true) {
+            if (visited[i] == true || team.contains(i)) {
                 continue;
             }
             else {
@@ -87,7 +114,7 @@ public class Horse {
         Iterator<Integer> i = children.iterator();
         while (i.hasNext()) {
             int child = i.next();
-            if (visited[child]) {
+            if ((visited[child] && path.contains(child)) || team.contains(child)) {
                 continue;
             }
             else {
