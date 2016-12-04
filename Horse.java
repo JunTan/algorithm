@@ -61,14 +61,13 @@ public class Horse {
     }
 
     private ArrayList<Integer> extractlongestpath(Boolean visited[]) {
-        int maxweight = -1;
+        int maxweight = 0;
         ArrayList<Integer> longestpath = new ArrayList<Integer>();
         for (int i = 0; i < graph.length; i++) {
             if (visited[i] == true) {
                 continue;
             }
             else {
-                visited[i] = true;
                 Tuple temp = longestchildpath(visited, graph[i]);
                 if ((temp.max+weight[i])*(temp.path.size()+1) > maxweight) {
                     maxweight = temp.max+weight[i];
@@ -82,7 +81,7 @@ public class Horse {
         return longestpath;
     }
     private Tuple longestchildpath(Boolean[] visited, LinkedList<Integer> children) {
-        int max = -1;
+        int max = 0;
         ArrayList<Integer> path = new ArrayList<>();
         Tuple result = new Tuple(max, path);
         Iterator<Integer> i = children.iterator();
