@@ -46,18 +46,22 @@ public class Horse {
                     result.add(temp);
                 }
             }
-
-            String str = ""
+            
+            String str = "";
 
             for (ArrayList<Integer> l : result) {
+                HashSet<Integer> duplicate = new HashSet<Integer>();
                 for (int i : l) {
-                    str = str + i + " ";
+                    if (!duplicate.contains(i)) {
+                        duplicate.add(i);
+                        str = str  + " " + i;
+                    }
                 }
-                str = str.trim() + ";"
+                str = str.trim() +  ";";
             }
-            str = str.substring(0, str.length()-1) + "\n";
+            str = str.substring(0, str.length()-1).replaceAll(";$", "") + "\n";
 
-
+            System.out.println(str);
 
         }
         catch (IOException e) {
@@ -67,7 +71,7 @@ public class Horse {
     private LinkedList<Integer>[] initializegraph(int[][] input) {
         LinkedList<Integer> graph[] = new LinkedList[input.length];
         for (int i = 0; i < input.length; i++)
-            graph[i] = new LinkedList();
+            graph[i] = new LinkedList<Integer>();
         for (int i = 0; i < input.length; i++) {
             for (int j = 0; j < input[0].length; j++) {
                 if (i != j) {
@@ -95,7 +99,9 @@ public class Horse {
                 continue;
             }
             else {
-                Tuple temp = longestchildpath(visited, graph[i]);
+                ArrayList<Integer> prev = new ArrayList<Integer>();
+                prev.add(i);
+                Tuple temp = longestchildpath(visited, graph[i], prev);
                 if ((temp.max+weight[i])*(temp.path.size()+1) > maxweight) {
                     maxweight = temp.max+weight[i];
                     longestpath = temp.path;
@@ -107,20 +113,22 @@ public class Horse {
         }
         return longestpath;
     }
-    private Tuple longestchildpath(Boolean[] visited, LinkedList<Integer> children) {
+    private Tuple longestchildpath(Boolean[] visited, LinkedList<Integer> children, ArrayList<Integer> prev) {
         int max = 0;
         ArrayList<Integer> path = new ArrayList<>();
         Tuple result = new Tuple(max, path);
-        Iterator<Integer> i = children.iterator();
-        while (i.hasNext()) {
-            int child = i.next();
-            if ((visited[child] && path.contains(child)) || team.contains(child)) {
+        
+        int c = 0;
+        for (int child : children) {
+            if ((visited[child] && prev.contains(child)) || team.contains(child)) {
                 continue;
             }
             else {
                 visited[child] = true;
-                Tuple temp = longestchildpath(visited, graph[child]);
-                if ((weight[child] + temp.max)*(temp.path.size()+1) > result.max) {
+                ArrayList<Integer> tempprev = prev;
+                tempprev.add(child);
+                Tuple temp = longestchildpath(visited, graph[child], tempprev);
+                if ((weight[child] + temp.max)*(temp.path.size()+1) > result.max && !path.contains(child)) {
                     result.max = temp.max + weight[child];
                     result.path = temp.path;
                     result.path.add(0, child);
@@ -130,6 +138,8 @@ public class Horse {
         return result;
 
     }
+
+
 
     public class Tuple {
         int max;
