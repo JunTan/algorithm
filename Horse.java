@@ -10,8 +10,11 @@ public class Horse {
         team = new HashSet<Integer>();
 	}
 	public static void main(String args[]) {
+        BufferedWriter bw = null;
         try {
-    		BufferedReader r = new BufferedReader(new FileReader(args[0]));
+            bw = new BufferedWriter(new FileWriter("output2.out", true));
+            for (int a = 1; a <= 600; a++) {
+    		BufferedReader r = new BufferedReader(new FileReader(a + ".in"));
             String s = r.readLine();
             int V = Integer.parseInt(s);
             int adj[][] = new int[V][V];
@@ -50,6 +53,9 @@ public class Horse {
             String str = "";
 
             for (ArrayList<Integer> l : result) {
+                if (l.size() == 0) {
+                    continue;
+                }
                 HashSet<Integer> duplicate = new HashSet<Integer>();
                 for (int i : l) {
                     if (!duplicate.contains(i)) {
@@ -59,10 +65,12 @@ public class Horse {
                 }
                 str = str.trim() +  ";";
             }
-            str = str.substring(0, str.length()-1).replaceAll(";$", "") + "\n";
+            str = str.substring(0, str.length()-1).replaceAll(";$", "");
 
-            System.out.println(str);
-
+            bw.write(str);
+            bw.newLine();
+            bw.flush();
+            } 
         }
         catch (IOException e) {
             return;
