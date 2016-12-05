@@ -52,7 +52,9 @@ public class Horse {
             
             String str = "";
 
+
             for (ArrayList<Integer> l : result) {
+
                 if (l.size() == 0) {
                     continue;
                 }
@@ -66,9 +68,10 @@ public class Horse {
                 str = str.trim() +  ";";
             }
             str = str.substring(0, str.length()-1).replaceAll(";$", "");
-            bw.write(str);
+            System.out.println(str);
+            /*bw.write(str);
             bw.newLine();
-            bw.flush();
+            bw.flush();*/
             } 
         }
         catch (IOException e) {
@@ -131,7 +134,7 @@ public class Horse {
             }
             else {
                 visited[child] = true;
-                ArrayList<Integer> tempprev = new ArrayList<Integer>(prev);
+                ArrayList<Integer> tempprev = prev;
                 tempprev.add(child);
                 Tuple temp = longestchildpath(visited, graph[child], tempprev);
                 if ((weight[child] + temp.max)*(temp.path.size()+1) > (result.max*result.path.size()) && !temp.path.contains(child)) {
