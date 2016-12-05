@@ -12,8 +12,8 @@ public class Horse {
 	public static void main(String args[]) {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new FileWriter("output2.out", true));
-            for (int a = 1; a <= 600; a++) {
+            bw = new BufferedWriter(new FileWriter("output3.out", true));
+            for (int a = 13; a <= 13; a++) {
     		BufferedReader r = new BufferedReader(new FileReader(a + ".in"));
             String s = r.readLine();
             int V = Integer.parseInt(s);
@@ -66,7 +66,6 @@ public class Horse {
                 str = str.trim() +  ";";
             }
             str = str.substring(0, str.length()-1).replaceAll(";$", "");
-
             bw.write(str);
             bw.newLine();
             bw.flush();
@@ -103,14 +102,14 @@ public class Horse {
         int maxweight = 0;
         ArrayList<Integer> longestpath = new ArrayList<Integer>();
         for (int i = 0; i < graph.length; i++) {
-            if (visited[i] == true || team.contains(i)) {
+            if (team.contains(i)) {
                 continue;
             }
             else {
                 ArrayList<Integer> prev = new ArrayList<Integer>();
                 prev.add(i);
                 Tuple temp = longestchildpath(visited, graph[i], prev);
-                if ((temp.max+weight[i])*(temp.path.size()+1) > maxweight) {
+                if ((temp.max+weight[i])*(temp.path.size()+1) > (maxweight*longestpath.size()) && !temp.path.contains(i)) {
                     maxweight = temp.max+weight[i];
                     longestpath = temp.path;
                     longestpath.add(0, i);
@@ -129,14 +128,13 @@ public class Horse {
         int c = 0;
         for (int child : children) {
             if ((visited[child] && prev.contains(child)) || team.contains(child)) {
-                continue;
             }
             else {
                 visited[child] = true;
-                ArrayList<Integer> tempprev = prev;
+                ArrayList<Integer> tempprev = new ArrayList<Integer>(prev);
                 tempprev.add(child);
                 Tuple temp = longestchildpath(visited, graph[child], tempprev);
-                if ((weight[child] + temp.max)*(temp.path.size()+1) > result.max && !path.contains(child)) {
+                if ((weight[child] + temp.max)*(temp.path.size()+1) > (result.max*result.path.size()) && !temp.path.contains(child)) {
                     result.max = temp.max + weight[child];
                     result.path = temp.path;
                     result.path.add(0, child);
